@@ -22,7 +22,7 @@ export default function Contact() {
   return (
     <section className="py-32 px-8 bg-surface" id="contact" data-aos="zoom-in-up" data-aos-delay="50">
       <div className="max-w-6xl mx-auto preserve-3d">
-        <h2 data-aos="zoom-in-up" data-aos-delay="100" className="font-headline text-6xl md:text-8xl font-bold text-primary-container tracking-tighter mb-20 text-center uppercase opacity-20">
+        <h2 data-aos="zoom-in-up" data-aos-delay="100" className="font-headline text-6xl md:text-8xl font-bold text-primary-linkup tracking-tighter mb-20 text-center uppercase">
           LINK_UP
         </h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 preserve-3d">

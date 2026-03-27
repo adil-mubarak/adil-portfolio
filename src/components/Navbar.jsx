@@ -12,8 +12,23 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [active, setActive] = useState("#hero");
   const [indicator, setIndicator] = useState(null);
+  const [isDark, setIsDark] = useState(
+    () => typeof document !== "undefined" && document.documentElement.classList.contains("dark")
+  );
   const linkRefs = useRef({});
   const navRef = useRef(null);
+
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+  }, []);
+
+  const toggleTheme = () => {
+    const root = document.documentElement;
+    const nextIsDark = !root.classList.contains("dark");
+    root.classList.toggle("dark", nextIsDark);
+    window.localStorage.setItem("theme", nextIsDark ? "dark" : "light");
+    setIsDark(nextIsDark);
+  };
 
   useEffect(() => {
     const ids = NAV_LINKS.map((l) => l.href.slice(1));
@@ -75,12 +90,22 @@ export default function Navbar() {
             </a>
           ))}
         </div>
-        <a
-          className="bg-primary-container text-on-primary px-6 py-2.5 rounded hover:bg-primary transition-all duration-300 font-headline font-bold uppercase tracking-tight text-sm active:scale-95 shadow-lg shadow-primary/20"
-          href="mailto:aadilmubarake@gmail.com"
-        >
-          Initiate Link
-        </a>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            className="w-11 h-11 rounded-xl glass-panel flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary transition-all duration-300 active:scale-95 shadow-lg"
+          >
+            <span className="material-symbols-outlined text-xl">{isDark ? "light_mode" : "dark_mode"}</span>
+          </button>
+          <a
+            className="bg-primary-container text-on-primary px-6 py-2.5 rounded hover:bg-primary transition-all duration-300 font-headline font-bold uppercase tracking-tight text-sm active:scale-95 shadow-lg shadow-primary/20"
+            href="mailto:aadilmubarake@gmail.com"
+          >
+            Initiate Link
+          </a>
+        </div>
       </div>
     </nav>
   );

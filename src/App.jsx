@@ -13,7 +13,14 @@ import Footer from "./components/Footer";
 
 function App() {
   useEffect(() => {
-    document.documentElement.classList.add("dark", "scroll-smooth");
+    const root = document.documentElement;
+    root.classList.add("scroll-smooth");
+
+    const storedTheme = window.localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const shouldUseDark = storedTheme ? storedTheme === "dark" : prefersDark;
+    root.classList.toggle("dark", shouldUseDark);
+
     AOS.init({
       duration: 700,
       easing: "ease-out-cubic",

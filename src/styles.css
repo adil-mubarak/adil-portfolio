@@ -43,6 +43,7 @@
   --on-tertiary-fixed: #2d1600;
   --surface-container-highest: #d5ddeb;
   --on-primary-container: #ffffff;
+  --primary-linkup: #00add8;
   --secondary-container: #cfd9ee;
   --on-tertiary: #ffffff;
   --error: #ba1a1a;
@@ -102,6 +103,7 @@ html.dark {
   --on-tertiary-fixed: #2d1600;
   --surface-container-highest: #2d3449;
   --on-primary-container: #003c4d;
+  --primary-linkup: #09324a;
   --secondary-container: #3e495d;
   --on-tertiary: #4a2800;
   --error: #ffb4ab;
