@@ -12,9 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tsparticles/react": "^3.0.0",
-    "@tsparticles/slim": "^3.9.1",
-    "aos": "^2.3.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

@@ -1,59 +1,35 @@
 import React, { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import Skills from "./components/Skills";
-import Projects from "./components/Projects";
 import Experience from "./components/Experience";
-import CTA from "./components/CTA";
+import Projects from "./components/Projects";
+import Skills from "./components/Skills";
+import EngineeringApproach from "./components/EngineeringApproach";
+import GitHub from "./components/GitHub";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
 function App() {
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.add("scroll-smooth");
-
     const storedTheme = window.localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const shouldUseDark = storedTheme ? storedTheme === "dark" : prefersDark;
-    root.classList.toggle("dark", shouldUseDark);
-
-    AOS.init({
-      duration: 700,
-      easing: "ease-out-cubic",
-      once: true,
-      offset: 60,
-    });
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
+    root.classList.toggle("dark", storedTheme ? storedTheme === "dark" : prefersDark);
   }, []);
 
   return (
-    <div className="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+    <div className="site-shell">
+      <a className="skip-link" href="#main-content">Skip to content</a>
       <Navbar />
-      <main className="pt-20 preserve-3d">
+      <main id="main-content">
         <Hero />
         <About />
-        <Skills />
-        <Projects />
         <Experience />
-        <CTA />
+        <Projects />
+        <Skills />
+        <EngineeringApproach />
+        <GitHub />
         <Contact />
       </main>
       <Footer />

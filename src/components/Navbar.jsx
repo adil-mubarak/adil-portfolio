@@ -1,112 +1,60 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 const NAV_LINKS = [
-  { label: "Home",         href: "#hero" },
-  { label: "About",        href: "#about" },
-  { label: "Skills",       href: "#skills" },
-  { label: "Architecture", href: "#projects" },
-  { label: "Runtime",      href: "#experience" },
-  { label: "Contact",      href: "#contact" },
+  ["About", "#about"],
+  ["Experience", "#experience"],
+  ["Projects", "#projects"],
+  ["Approach", "#approach"],
+  ["GitHub", "#github"],
+  ["Contact", "#contact"],
 ];
 
 export default function Navbar() {
-  const [active, setActive] = useState("#hero");
-  const [indicator, setIndicator] = useState(null);
-  const [isDark, setIsDark] = useState(
-    () => typeof document !== "undefined" && document.documentElement.classList.contains("dark")
-  );
-  const linkRefs = useRef({});
-  const navRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains("dark"));
 
   useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"));
+    const closeMenu = () => setIsOpen(false);
+    window.addEventListener("hashchange", closeMenu);
+    return () => window.removeEventListener("hashchange", closeMenu);
   }, []);
 
   const toggleTheme = () => {
-    const root = document.documentElement;
-    const nextIsDark = !root.classList.contains("dark");
-    root.classList.toggle("dark", nextIsDark);
+    const nextIsDark = !document.documentElement.classList.contains("dark");
+    document.documentElement.classList.toggle("dark", nextIsDark);
     window.localStorage.setItem("theme", nextIsDark ? "dark" : "light");
     setIsDark(nextIsDark);
   };
 
-  useEffect(() => {
-    const ids = NAV_LINKS.map((l) => l.href.slice(1));
-
-    const handleScroll = () => {
-      const triggerY = window.scrollY + window.innerHeight * 0.3;
-      let current = ids[0];
-      ids.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= triggerY) current = id;
-      });
-      setActive(`#${current}`);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const activeEl = linkRefs.current[active];
-    const navEl = navRef.current;
-    if (!activeEl || !navEl) return;
-    const navRect = navEl.getBoundingClientRect();
-    const linkRect = activeEl.getBoundingClientRect();
-    setIndicator({ left: linkRect.left - navRect.left, width: linkRect.width });
-  }, [active]);
-
   return (
-    <nav className="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-md border-b border-primary/5">
-      <div className="flex justify-between items-center max-w-7xl mx-auto px-8 h-20">
-        <div className="text-xl font-black text-[#00ADD8] font-['Space_Grotesk'] tracking-tighter flex items-center gap-2">
-          <span className="material-symbols-outlined text-primary-container">hub</span>
-          GoBackend.dev
-        </div>
-        <div ref={navRef} className="hidden md:flex items-center gap-8 relative">
-          {indicator && (
-            <span
-              className="absolute bottom-0 h-0.5 bg-[#5cd4ff] rounded-full pointer-events-none"
-              style={{
-                left: indicator.left,
-                width: indicator.width,
-                transition: "left 0.35s cubic-bezier(0.4,0,0.2,1), width 0.35s cubic-bezier(0.4,0,0.2,1)",
-              }}
-            />
-          )}
-          {NAV_LINKS.map(({ label, href }) => (
-            <a
-              key={href}
-              href={href}
-              ref={(el) => { linkRefs.current[href] = el; }}
-              className={
-                active === href
-                  ? "text-[#5cd4ff] font-['Space_Grotesk'] font-bold tracking-tighter transition-colors duration-300 active:scale-95"
-                  : "text-[#dae2fd] opacity-80 font-['Space_Grotesk'] font-bold tracking-tighter hover:text-[#5cd4ff] hover:opacity-100 transition-colors duration-300 active:scale-95"
-              }
-            >
-              {label}
-            </a>
+    <header className="site-header">
+      <nav className="nav-wrap" aria-label="Primary navigation">
+        <a className="brand" href="#top" aria-label="Adil Mubarak home">
+          <span className="brand-mark" aria-hidden="true">AM</span>
+          <span>Adil Mubarak</span>
+        </a>
+
+        <div className={`nav-links ${isOpen ? "is-open" : ""}`}>
+          {NAV_LINKS.map(([label, href]) => (
+            <a key={href} href={href}>{label}</a>
           ))}
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            className="w-11 h-11 rounded-xl glass-panel flex items-center justify-center text-on-surface hover:bg-primary-container hover:text-on-primary transition-all duration-300 active:scale-95 shadow-lg"
-          >
-            <span className="material-symbols-outlined text-xl">{isDark ? "light_mode" : "dark_mode"}</span>
+
+        <div className="nav-actions">
+          <button className="icon-button" type="button" onClick={toggleTheme} aria-label={isDark ? "Use light theme" : "Use dark theme"}>
+            <span aria-hidden="true">{isDark ? "☼" : "◐"}</span>
           </button>
-          <a
-            className="bg-primary-container text-on-primary px-6 py-2.5 rounded hover:bg-primary transition-all duration-300 font-headline font-bold uppercase tracking-tight text-sm active:scale-95 shadow-lg shadow-primary/20"
-            href="mailto:aadilmubarake@gmail.com"
-          >
-            Initiate Link
-          </a>
+          <a className="nav-cta" href="#contact">Let&apos;s talk</a>
+          <button className="menu-button" type="button" onClick={() => setIsOpen((open) => !open)} aria-expanded={isOpen} aria-controls="mobile-navigation" aria-label={isOpen ? "Close menu" : "Open menu"}>
+            <span aria-hidden="true">{isOpen ? "×" : "☰"}</span>
+          </button>
         </div>
+      </nav>
+      <div id="mobile-navigation" className="mobile-nav" data-open={isOpen}>
+        {NAV_LINKS.map(([label, href]) => (
+          <a key={href} href={href} onClick={() => setIsOpen(false)}>{label}</a>
+        ))}
       </div>
-    </nav>
+    </header>
   );
 }
